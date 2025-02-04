@@ -1,0 +1,9 @@
+E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\obj\Release\net8.0\win-x64\PN_HDSWeb_ThongBao.csproj.AssemblyReference.cache
+E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\obj\Release\net8.0\win-x64\PN_HDSWeb_ThongBao.GeneratedMSBuildEditorConfig.editorconfig
+E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\obj\Release\net8.0\win-x64\PN_HDSWeb_ThongBao.AssemblyInfoInputs.cache
+E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\obj\Release\net8.0\win-x64\PN_HDSWeb_ThongBao.AssemblyInfo.cs
+E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\obj\Release\net8.0\win-x64\PN_HDSWeb_ThongBao.csproj.CoreCompileInputs.cache
+E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\obj\Release\net8.0\win-x64\PN_HDSWeb_ThongBao.MvcApplicationPartsAssemblyInfo.cs
+E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\obj\Release\net8.0\win-x64\PN_HDSWeb_ThongBao.MvcApplicationPartsAssemblyInfo.cache
+E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\obj\Release\net8.0\win-x64\PN_HDSWeb_ThongBao.RazorAssemblyInfo.cache
+E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\obj\Release\net8.0\win-x64\PN_HDSWeb_ThongBao.RazorAssemblyInfo.cs

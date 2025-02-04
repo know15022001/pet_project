@@ -1,0 +1,91 @@
+
+
+@if(character.IsUsingSkill())
+{
+    radiusSums = (int)((character.FrameWidth / 2) + (character.CurrentSkill.Width) * character.CurrentSkill.Range);
+    <div
+        style="position: absolute;
+        width:@(radiusSums*2)px;
+        height:@(radiusSums*2)px;
+        border-radius:@(radiusSums)px;
+        left: @(character.X)px; 
+        top: @(character.Y)px;
+        transform: translate(-50%, -50%); border: 1px solid green;" 
+        >
+            <div style="position: relative;
+            width:@(radiusSums*2)px;
+            height:@(radiusSums*2)px;
+            border-radius:@(radiusSums)px;"
+            @onclick="HandleMouseMove">
+                <div style="position: absolute; 
+                    width:@(skill.Width)px; 
+                    height:@(skill.Height)px; 
+                    left:@(skill.Position.X)px; 
+                    top:@(skill.Position.Y)px; 
+                    background-color: #150; 
+                    border-radius: @(skill.Width/2)px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    transform: translate(-50%, -50%);">
+                </div>
+            </div>
+    </div>
+}
+
+<div class="@Class" 
+    style="left: @(character.X)px; 
+    top: @(character.Y)px;
+    width: @(character.FrameWidth)px; 
+    height: @(character.FrameHeight)px;
+    border-radius: @(character.FrameWidth/2)px;
+    background-image: url('@character.AnimationFrames[character.CurrentDirection][character.CurrentFrame]');
+    background-size: @(character.FrameWidth)px @(character.FrameHeight)px;
+    transform: translate(-50%, -50%) @(character.IsFacingLeft ? "scaleX(-1)" : "scaleX(1)");">
+
+</div>
+@code {
+    [Parameter] public Character character {get;set;}
+    [Parameter] public string Class {get;set;}
+    private int radiusSums = 0;
+    private const int MoveInterval = 50; // Di chuyển mỗi 50ms
+    [Parameter] public Skill skill {get;set;}
+    protected void HandleMouseMove(MouseEventArgs e) //move by clicking
+    {
+        int x, y;
+        x = (int)(e.OffsetX);
+        y = (int)(e.OffsetY);
+        skill.NewPosition = new Vector2(x, y);
+        MoveTimer();
+        
+        //InvokeAsync(StateHasChanged);
+    }
+
+    private async Task MoveTimer()
+    {
+        double distance = Vector2.Distance(skill.NewPosition, skill.Position);
+        double totalTime = distance / skill.Speed * 1000;//ms
+        double elapsedTime = 0;
+        while(distance > 1*skill.Speed)
+        {
+            // Tính vị trí mới
+            Vector2 movement = CalculateMovement(skill);
+            skill.Position += movement;
+            // cập nhật UI
+            //InvokeAsync(StateHasChanged);
+            await Task.Delay(MoveInterval);
+            distance = Vector2.Distance(skill.NewPosition, skill.Position);
+        }
+        // Ensure the final position is set
+        skill.Position = skill.NewPosition;
+        //skill.Position.Y = skill.NewPosition.Y;
+
+        // Stop using the skill if needed
+        character.StopUsingSkill();
+    }
+    private Vector2 CalculateMovement(Skill skill)
+    {
+        // Tính toán vector di chuyển dựa trên logic game của bạn
+        Vector2 direction = Vector2.Normalize(skill.NewPosition - skill.Position);
+        return direction * character.Speed;
+    }
+}

@@ -1,0 +1,132 @@
+body[b-edt2i9hecy] {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+
+.post-container[b-edt2i9hecy] {
+    width: 600px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.post[b-edt2i9hecy] {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.post-header[b-edt2i9hecy] {
+    /*display: flex;*/
+    /*align-items: center;*/
+}
+
+.profile-image[b-edt2i9hecy] {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-name[b-edt2i9hecy] {
+    font-weight: bold;
+    color: #333;
+}
+
+.post-content[b-edt2i9hecy] {
+    margin-top: 10px;
+}
+
+.post-images[b-edt2i9hecy] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.post-image[b-edt2i9hecy] {
+    width: calc(50% - 5px);
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.comments-section[b-edt2i9hecy] {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f5eded;
+    border-radius: 8px;
+}
+
+.comment[b-edt2i9hecy] {
+    margin-bottom: 5px;
+}
+
+.comment-user[b-edt2i9hecy] {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.comment-text[b-edt2i9hecy] {
+    color: #555;
+}
+
+.comment-form[b-edt2i9hecy] {
+    display: flex;
+    margin-top: 10px;
+}
+
+.comment-input[b-edt2i9hecy] {
+    flex: 1;
+    padding: 5px;
+    border: 3px solid #ccc;
+    border-radius: 4px;
+}
+
+.comment-button[b-edt2i9hecy] {
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.edit-button[b-edt2i9hecy] {
+    background: none;
+    border: none;
+    color: blue;
+    cursor: pointer;
+    float: right !important;
+    font-weight: bold;
+    text-decoration-line: underline;
+}
+
+.pull-right[b-edt2i9hecy] {
+    float: right !important;
+    font-weight: bold;
+    text-decoration-line: underline;
+    color: firebrick;
+}
+
+.image-viewer[b-edt2i9hecy] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .image-viewer img[b-edt2i9hecy] {
+        max-width: 90%;
+        max-height: 90%;
+    }

@@ -1,0 +1,46 @@
+@page "/createmap"
+
+<button @onclick="GenerateArea">Tạo Vùng</button>
+<button @onclick="GenerateMap">Tạo Bản Đồ</button>
+<div>
+    @if (map != null)
+    {
+        <table>
+            @for (int y = 0; y < map.mapHeight; y++)
+            {
+                <tr>
+                    @for (int x = 0; x < map.mapWidth; x++)
+                    {
+                        <td style="background-color:@GetColor(map.map[x, y]); width: 50px; height: 50px;">
+                            
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+</div>
+
+@code{
+    private Map map = new Map(20, 13);
+    private void GenerateArea()
+    {
+        map.GenerateArea(map.mapWidth, map.mapHeight); // Tạo khu vực ngẫu nhiên
+    }
+    private void GenerateMap()
+    {
+        map.GenerateMap(map.mapWidth, map.mapHeight); // Tạo bản đồ dựa trên quy tắc
+    }
+
+    private string GetColor(int terrainType)
+    {
+        return terrainType switch
+        {
+            0 => "#6E260E", // Đất
+            1 => "blue",  // Nước
+            2 => "green", // Rừng
+            3 => "gray",  // Núi
+            _ => "white"  // Mặc định
+        };
+    }
+}

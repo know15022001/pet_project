@@ -1,0 +1,676 @@
+﻿@page "/"
+@using System.Diagnostics
+@using System.Text.Json
+@inject IJSRuntime JSRuntime
+@inject IConfiguration Configuration
+@implements IDisposable
+
+
+<button @onclick="GodCreateItem">Create item</button>
+<button>Mario dùng @(Mario.CurrentSkill != null ? Mario.CurrentSkill.Name : "") ở vị trí: @(Mario.CurrentSkill != null ? Mario.CurrentSkill.Position.X :""), @(Mario.CurrentSkill != null ? Mario.CurrentSkill.Position.Y :"")</button>
+<div class="game-container">
+    
+    <div class="game-area" @onkeydown="HandleKeyDown" @onkeyup="HandleKeyUp" @oncontextmenu="PreventContextMenu" @oncontextmenu:preventDefault tabindex="0">
+        
+        <div style="position: absolute; left: @(Mario.X)px; top: @(Mario.Y - Mario.FrameHeight/2)px;"></div>
+        <CharacterUI Class="mario" character = "Mario" skill = "Mario.CurrentSkill"/>
+        
+        @foreach(var enemy in enemies)
+        {
+            <div style="position: absolute; left: @(enemy.X)px; top: @(enemy.Y - enemy.FrameHeight/2)px;">@enemy.Name - @enemy.Endurance, @enemy.Image</div>
+            @* <div class="enemy" style="left: @(enemy.X)px; top: @(enemy.Y)px; width: @(enemy.Width)px;height: @(enemy.Height)px;background-image: url('@enemy.AnimationFrames[enemy.CurrentFrame]');"></div> *@
+            
+            <CharacterUI Class="enemy" character = "enemy"/>
+        }
+        @foreach (var item in items)
+        {
+            <div style="position: absolute; left: @(item.X)px; top: @(item.Y - 20)px;">@item.Count</div>
+            <div class="item" style="left: @(item.X)px; top: @(item.Y)px; width: @(item.Width)px;height: @(item.Height)px"></div>
+        }
+    </div>
+    <div class = "skill-container">
+        @foreach (var skill in Mario.Skills)
+        {
+            <button class="skill" @onclick="()=>UseSkill(Mario,skill)" >@skill.Name</button>
+        }
+    </div>
+    <div>
+        <div style="padding:5px;">Your item @itemslist.Count</div>
+        @foreach(var myitem in Mario.Balo)
+        {
+            <ul>
+                <button @onclick="()=>ItemDetail(myitem)">@myitem.Name x @myitem.Count</button>
+            </ul>
+        }
+    </div>
+    @if (OpenDetail)
+    {
+        <div id="overlay" class="modal" tabindex="-1" style="display:block">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title fw-bold fs-4">@itemDetail.Name</div>
+                    <button type="button" class="btn-close" @onclick="()=> OpenDetail = false"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        @itemDetail.Description
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="()=> OpenDetail = false">Hủy bỏ</button>
+                    <button class="btn btn-primary" @onclick="()=>ItemActive(itemDetail)">Sử dụng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+<style>
+    .game-container {
+        background-color: #fff;
+        display: flex;
+        background-image: url('/image/worldmap.png');
+        background-size: 1647px 706px;
+        background-position: -@(Mario.X+1000)px -@(Mario.Y+570)px;
+        background-attachment: fixed;
+    }
+
+    .game-area {
+        position: relative;
+        width: 1000px;
+        height: 570px;
+        border: 3px solid green;
+    }
+
+    .mario {
+        position: absolute;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: 1px solid red;
+    }
+    .enemy {
+        position: absolute;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: 1px solid blue;
+    }
+
+    .item {
+        position: absolute;
+        background-color: #119;
+    }
+    .skill-container {
+        position: absolute;
+        display: flex;
+        background-color: #155;
+        bottom:0;
+        width: 1000px;
+        height: 80px;
+        align-items: center;
+        padding-left: 30%;
+    }
+    .skill {
+        background-color: #150;
+        width:50px; 
+        height:50px;
+    }
+</style>
+@code {
+    private bool OpenDetail = false;
+    private Item itemDetail = new Item();
+    private Random randomPosition = new Random();
+    private Timer? moveTimer;
+    private Timer? enemyMoveTimer;
+    private const int MoveInterval = 50; // Di chuyển mỗi 50ms
+    private const int EnemyMoveInterval = 50; // Di chuyển mỗi 50ms
+    private const int ChangeDirectionInterval = 2000; // 2 seconds
+    private const int MoveSpeed = 5; // Di chuyển 5px mỗi lần
+    private const double StopDistance = 1.0; // Khoảng cách để dừng di chuyển
+    private double CurrentFrame;
+
+    //cách để chọn vị trí trong một bức ảnh
+    //đưa vào css
+    /* background-image: url('@enemy.SpriteSheet'); */
+    /* background-position: -@(enemy.CurrentFrame * enemy.FrameWidth)px 0; */
+    //đưa vào xử lý di chuyển
+    // Update animation frame
+    //enemy.CurrentFrame = (enemy.CurrentFrame + 1) % enemy.TotalFrames;
+    //private string utr = "../basilisk_side.png";
+    private Character Mario = new Character();
+    private List<Skill> baseSkills = new List<Skill>
+    {
+        new Skill
+        {
+            defName = "punch",
+            Name = "Đấm",
+            Width = 50,
+            Height = 50,
+            TypeDamage = 1,
+            Damage = 10,
+            Range = 1,
+            Cooldown = 1,
+            Speed = 10,
+        },
+        new Skill
+        {
+            defName = "kick",
+            Name = "Đá",
+            Width = 50,
+            Height = 50,
+            TypeDamage = 1,
+            Damage = 15,
+            Range = 1,
+            Cooldown = 2,
+            Speed = 7,
+        }
+    };
+    private List<Character> LoadEnemyDataFromJson()
+    {
+        string filePath = Configuration["EnemyDataPath"]!;
+        string jsonString = File.ReadAllText(filePath);
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var enemyData = JsonSerializer.Deserialize<EnemyDataWrapper>(jsonString, options);
+        return enemyData?.Enemies ?? new List<Character>();
+    }
+    private void LoadEnemy()
+    {
+        enemies = new List<Character>();
+        foreach(var data in LoadEnemyDataFromJson())
+        {
+            Character enemy = new Character(data.Image)
+            {
+                id = data.id,
+                Name = data.Name,
+                Endurance = data.Endurance,
+                Speed = data.Speed,
+                X = data.X,
+                Y = data.Y,
+                Width = data.Width,
+                Height = data.Height,
+                IsRight = data.IsRight
+            };
+            enemies.Add(enemy);
+        }
+    }
+    public class EnemyDataWrapper
+    {
+        public List<Character> Enemies { get; set; } = new List<Character>();
+    }
+    private List<Character> enemies = new List<Character>();
+    private List<Item> itemslist = new List<Item>
+    {
+        new Item
+        {
+            defName = "ed_potion",
+            Name = "Endurance Potion",
+            Description = "A potion recovery Endurance",
+            X = 0,
+            Y = 0,
+            Width=10,
+            Height=10,
+            Rank = 1,
+            TypeObject = "self",//self, team, enemy, enemies, all
+            Function = "heal",//heal, buff, debuff, damage, teleport
+            Object = "Endurance",
+            ItemFunctions = new List<Function>
+            {
+                new Function
+                {
+                    Name="heal_endurance",
+                    Type="heal",
+                    Target = "Endurance"
+                }
+            }
+        },
+        new Item
+        {
+            defName = "mt_potion",
+            Name = "Sanity Potion",
+            Description = "A potion recovery Sanity",
+            X=0,
+            Y=0,
+            Width=10,
+            Height=10,
+            Rank = 1,
+            TypeObject = "self",//self, team, enemy, enemies, all
+            Function = "heal",//heal, buff, debuff, damage, teleport
+            Object = "Sanity",
+            ItemFunctions = new List<Function>
+            {
+                new Function
+                {
+                    Name="heal_sanity",
+                    Type="heal",
+                    Target = "Sanity"
+                }
+            }
+        }
+    };
+    private List<Item> items = new List<Item>
+    {
+        new Item
+        {
+            defName = "ed_potion",
+            Name = "Endurance Potion",
+            Description = "A potion recovery Endurance",
+            X=90,
+            Y=50,
+            Width=10,
+            Height=10,
+            Rank = 1,
+            TypeObject = "self",//self, team, enemy, enemies, all
+            Function = "heal",//heal, buff, debuff, damage, teleport
+            Object = "Endurance",
+            ItemFunctions = new List<Function>
+            { 
+                new Function 
+                { 
+                    Name="heal_endurance",
+                    Type="heal",
+                    Target = "Endurance"
+                } 
+            }
+        },
+        new Item
+        {
+            defName = "mt_potion",
+            Name = "Sanity Potion",
+            Description = "A potion recovery Sanity",
+            X=70,
+            Y=40,
+            Width=10,
+            Height=10,
+            Rank = 1,
+            TypeObject = "self",//self, team, enemy, enemies, all
+            Function = "heal",//heal, buff, debuff, damage, teleport
+            Object = "Sanity",
+            ItemFunctions = new List<Function>
+            {
+                new Function
+                {
+                    Name="heal_sanity",
+                    Type="heal",
+                    Target = "Sanity"
+                }
+            }
+        }
+    };
+
+    protected override void OnInitialized()
+    {
+        // Khởi tạo map
+        CurrentFrame = (Mario.X + 500) % 1647*100;
+        // Đặt vị trí ban đầu của Mario
+        Mario.X = 744;
+        Mario.Y = 257;
+        Mario.Width = 256;
+        Mario.Height = 256;
+        Mario.Name = "Mario";
+        Mario.IsRight = false;
+        
+        LoadEnemy();
+        Mario.Skills.AddRange(baseSkills);
+        moveTimer = new Timer(MoveObject, null, 0, MoveInterval);
+        int initialDelay = Random.Shared.Next(0, EnemyMoveInterval);
+        enemyMoveTimer = new Timer(MoveEnemies, null, initialDelay, EnemyMoveInterval);
+    }
+    
+    private void PreventContextMenu(MouseEventArgs e)
+    {
+        if(e.Button == 2)
+        {
+            int x = (int)(e.OffsetX);
+            int y = (int)(e.OffsetY);
+            
+            Mario.TargetPosition = new Vector2(x, y);
+            Mario.IsMoving = true;
+            
+           
+            Console.WriteLine($"x={x}, y={y}");
+
+            // Bắt đầu di chuyển
+            moveTimer?.Change(0, MoveInterval);
+        }
+    }
+    private void ItemDetail(Item item)
+    {
+        OpenDetail = true;
+        itemDetail = item;
+    }
+    
+    #region CheckObjects
+        private void CheckPosition()//kiểm tra có ra ngoài màn hình
+        {
+            int scale = Mario.FrameWidth/2;
+            if (Mario.X - scale < Mario.X_min) Mario.X = (int)(Mario.X_min + scale);
+            if (Mario.X + scale > Mario.X_max) Mario.X = (int)(Mario.X_max - scale);
+            if (Mario.Y - scale < Mario.Y_min) Mario.Y = (int)(Mario.Y_min + scale);
+            if (Mario.Y + scale > Mario.Y_max) Mario.Y = (int)(Mario.Y_max - scale);
+        }
+        private bool IsColliding(Character obj1, Character obj2)//kiểm tra va chạm theo bán kính
+        {
+            // Tính toán bán kính
+            float radius1 = obj1.FrameWidth / 2; // Bán kính của Mario
+            float radius2 = obj2.FrameWidth / 2; // Bán kính của enemy
+
+            // Tính toán khoảng cách giữa hai tâm
+            float deltaX = (obj1.X + radius1) - (obj2.X + radius2);
+            float deltaY = (obj1.Y + radius1) - (obj2.Y + radius2);
+            float distanceSquared = deltaX * deltaX + deltaY * deltaY;
+
+            // So sánh với tổng bán kính
+            float radiusSum = radius1 + radius2;
+            return distanceSquared <= (radiusSum * radiusSum);
+        }
+        private bool IsColliding(Character obj1, Item obj2)
+        {
+            // Tính toán bán kính
+            float radius1 = obj1.Width / 2; // Bán kính của Mario
+            float radius2 = obj2.Width / 2; // Bán kính của item
+
+            // Tính toán khoảng cách giữa hai tâm
+            float deltaX = (obj1.X + radius1) - (obj2.X + radius2);
+            float deltaY = (obj1.Y + radius1) - (obj2.Y + radius2);
+            float distanceSquared = deltaX * deltaX + deltaY * deltaY;
+
+            // So sánh với tổng bán kính
+            float radiusSum = radius1 + radius2;
+            return distanceSquared <= (radiusSum * radiusSum);
+        }
+        private float DistanceCircle(Character obj1, Character obj2)
+        {
+            // Tính toán bán kính
+            float radius1 = obj1.Width / 2; // Bán kính của Mario
+            float radius2 = obj2.Width / 2; // Bán kính của item
+
+            // Tính toán khoảng cách giữa hai tâm
+            float deltaX = (obj1.X) - (obj2.X);
+            float deltaY = (obj1.Y) - (obj2.Y);
+            float distanceSquared = (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            return distanceSquared;
+        }
+        private void CheckBoundaries(Character character)
+        {
+            character.X = Math.Clamp(character.X, 0 + (int)(character.FrameWidth/2), 1000 - (int)(character.FrameWidth/2));
+            character.Y = Math.Clamp(character.Y, 0 + (int)(character.FrameHeight/2), 650 - (int)(character.FrameHeight/2));
+        }
+        int distanceRadius = 0;
+        private void CheckCollisions()//xử lý va chạm
+        {
+            // Trong phương thức Update()
+            foreach (var enemy in enemies)
+            {
+                if (IsColliding(Mario, enemy))
+                {
+                    // Tính toán khoảng cách giữa hai tâm
+                    int deltaX = Mario.X - enemy.X;
+                    int deltaY = Mario.Y - enemy.Y;
+                    // Tính toán hướng đẩy
+                    int directionx = (deltaX > 0)? 1 : -1; 
+                    int directiony = (deltaY > 0)? 1 : -1;
+                    // Khoảng cách của tổng bán kính
+                    int radiusSum = (Mario.FrameWidth / 2) + (enemy.FrameWidth / 2);
+                    // Khoảng cách hiện tại của hai đường tròn
+                    float distance = DistanceCircle(Mario, enemy);
+                    // Tính toán khoảng cách cần đẩy
+                    float overlap = radiusSum - distance;
+                    // Xử lý va chạm với quái vật
+                    Mario.X += (int)(directionx * overlap);
+                    Mario.Y += (int)(directiony * overlap);
+                    enemy.X -= (int)(directionx * overlap);
+                    enemy.Y -= (int)(directiony * overlap);
+                    distanceRadius = (int)distance;
+                    Console.WriteLine($"{radiusSum} - {distance} = {overlap}");
+                    CheckBoundaries(Mario); // Đảm bảo Mario không đi ra ngoài màn hình
+                }
+            }
+            List<Item> itemToRemove = new List<Item>();
+            foreach (var item in items)
+            {
+                if (IsColliding(Mario, item))
+                {
+                    // Xử lý va chạm với vật phẩm
+                    Mario.CollectItem(item);
+                    itemToRemove.Add(item);
+                }
+            }
+            foreach (var deleteItem in itemToRemove)
+            {
+                items.Remove(deleteItem);
+            }
+        }
+    #endregion
+
+    void GodCreateItem()
+    {
+        items.AddRange(itemslist);
+        foreach(var item in items)
+        {
+            item.X = randomPosition.Next(1, 499);
+            item.Y = randomPosition.Next(1, 499);
+        }
+    }
+    void ItemActive(Item item)
+    {
+        foreach(var func in item.ItemFunctions)
+        {
+            switch (func.Type)
+            {
+                case "heal":
+                    switch (func.Target)
+                    {
+                        case "Endurance": Mario.Endurance += 10 * item.Rank; break;
+                        case "Sanity": Mario.Sanity += 10 * item.Rank; break;
+                        case "Beauty": Mario.Beauty += 10 * item.Rank; break;
+                    }
+                    break;
+            }
+        }
+        item.Count--;
+        if (item.Count <= 0) Mario.Balo.Remove(item);
+        OpenDetail = false;
+    }
+
+    #region MoveClass
+
+        public void Dispose()
+        {
+            moveTimer?.Dispose();
+            enemyMoveTimer?.Dispose();
+        }
+        private void HandleMouseClick(MouseEventArgs e) //move by clicking
+        {
+            if(e.Button == 2)
+            {
+                int x = (int)(e.OffsetX);
+                int y = (int)(e.OffsetY);
+                
+                Mario.TargetPosition = new Vector2(x, y);
+                Mario.IsMoving = true;
+                
+            
+                Console.WriteLine($"x={x}, y={y}");
+
+                // Bắt đầu di chuyển
+                moveTimer?.Change(0, MoveInterval);
+            }
+        }
+
+        private void MoveObject(object? state)
+        {
+            if (!Mario.IsMoving)
+            {
+                moveTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+                return;
+            }
+
+            Vector2 movement = CalculateMovement(Mario);
+
+            // Xác định hướng dựa trên vector di chuyển
+            DirectionMovement(Mario,movement);
+
+            // Di chuyển Mario
+            Mario.X += (int)movement.X;
+            Mario.Y += (int)movement.Y;
+
+            // Cập nhật frame animation
+            FrameAnimation(Mario);
+
+            CheckBoundaries(Mario);
+            CheckCollisions();
+
+            // Kiểm tra xem đã đến đích chưa
+            if (Vector2.Distance(new Vector2(Mario.X, Mario.Y), Mario.TargetPosition) <= StopDistance * Mario.Speed)
+            {
+                Mario.IsMoving = false;
+            }
+
+            InvokeAsync(StateHasChanged);
+        }
+        private void MoveEnemies(object? state)
+        {
+            // Di chuyển enemies
+            foreach (var enemy in enemies)
+            {
+                MoveEnemy(enemy);
+            }
+            CheckCollisions();
+            InvokeAsync(StateHasChanged);
+        }
+
+        private void MoveEnemy(Character enemy)
+        {
+            if (!enemy.IsMoving)
+            {
+                // Chọn một điểm đích ngẫu nhiên trong phạm vi màn hình
+                enemy.TargetPosition = new Vector2(
+                    Random.Shared.Next(0, Mario.X_max - enemy.Width),
+                    Random.Shared.Next(0, Mario.Y_max - enemy.Height)
+                );
+                enemy.IsMoving = true;
+            }
+
+            Vector2 movement = CalculateMovement(enemy);
+
+            // Xác định hướng dựa trên vector di chuyển
+            DirectionMovement(enemy,movement);
+
+            // Di chuyển enemy
+            enemy.X += (int)movement.X;
+            enemy.Y += (int)movement.Y;
+
+            // Cập nhật frame animation
+            FrameAnimation(enemy);
+
+            // Kiểm tra xem đã đến đích chưa
+            if (Vector2.Distance(new Vector2(enemy.X, enemy.Y), enemy.TargetPosition) <= StopDistance * enemy.Speed)
+            {
+                enemy.IsMoving = false;
+            }
+            CheckBoundaries(enemy);
+        }
+
+        private Vector2 CalculateMovement(Character character)
+        {
+            // Tính toán vector di chuyển dựa trên logic game của bạn
+            Vector2 direction = Vector2.Normalize(character.TargetPosition - new Vector2(character.X, character.Y));
+            return direction * character.Speed;
+        }
+
+        private HashSet<string> pressedKeys = new HashSet<string>();
+
+        private void HandleKeyDown(KeyboardEventArgs e)
+        {
+            pressedKeys.Add(e.Key.ToLower());
+            UpdateMovement();
+        }
+
+        private void HandleKeyUp(KeyboardEventArgs e)
+        {
+            pressedKeys.Remove(e.Key.ToLower());
+            UpdateMovement();
+        }
+
+        private void UpdateMovement()//move by type
+        {
+            
+
+            if (pressedKeys.Contains("a") || pressedKeys.Contains("arrowleft")) { Mario.X -= Mario.Speed; Mario.IsFacingLeft = false;}
+            if (pressedKeys.Contains("d") || pressedKeys.Contains("arrowright")) { Mario.X += Mario.Speed; Mario.IsFacingLeft = true;}
+            if (pressedKeys.Contains("w") || pressedKeys.Contains("arrowup")) Mario.Y -= Mario.Speed;
+            if (pressedKeys.Contains("s") || pressedKeys.Contains("arrowdown")) Mario.Y += Mario.Speed;
+
+            // Update direction
+            if (Mario.X != 0 || Mario.Y != 0)
+            {
+                if (Math.Abs(Mario.X) > Math.Abs(Mario.Y))
+                {
+                    Mario.CurrentDirection = Mario.X > 0 ? Character.Direction.Right : Character.Direction.Left;
+                }
+                else
+                {
+                    Mario.CurrentDirection = Mario.Y > 0 ? Character.Direction.Down : Character.Direction.Up;
+                }
+
+                // Update animation frame
+                FrameAnimation(Mario);
+            }
+            Console.WriteLine($"Speed={Mario.Speed}, Mario.X={Mario.X}, Mario.Y={Mario.Y}, PressedKeys: {string.Join(", ", pressedKeys)}");
+
+
+            CheckPosition();
+            CheckCollisions();
+            StateHasChanged();
+        }
+
+    #endregion
+
+    
+    private void DirectionMovement(Character chr, Vector2 movement)
+    {
+        // Xác định hướng dựa trên vector di chuyển
+        if (Math.Abs(movement.X) > Math.Abs(movement.Y))
+        {
+            chr.CurrentDirection = movement.X > 0 ? Character.Direction.Right : Character.Direction.Left;
+        }
+        else
+        {
+            chr.CurrentDirection = movement.Y > 0 ? Character.Direction.Down : Character.Direction.Up;
+        }
+        if (Character.Direction.Left == chr.CurrentDirection) 
+        {
+            if(chr.IsRight)
+                chr.IsFacingLeft = true;//mặc định hình ảnh khi đi sang trái
+            else chr.IsFacingLeft = false;
+        }
+        
+        if (Character.Direction.Right == chr.CurrentDirection) 
+        {
+            if(!chr.IsRight)
+                chr.IsFacingLeft = true;//đảo ngược hình ảnh khi đi sang phải
+            else chr.IsFacingLeft = false;
+        }
+    }
+
+    private void FrameAnimation(Character chr)
+    {
+        // Cập nhật frame animation
+        chr.MoveCount++;
+        if (chr.MoveCount >= chr.MovesPerFrame)
+        {
+            chr.CurrentFrame = (chr.CurrentFrame + 1) % chr.TotalFrames;
+            chr.MoveCount = 0;
+        }
+    }
+
+    private void UseSkill(Character chr, Skill skill)
+    {
+        double radiusSums = ((chr.FrameWidth / 2) + (skill.Width) * skill.Range);
+        skill.Position = new Vector2(radiusSums,radiusSums);
+        chr.UseSkill(skill);
+    }
+    
+    
+}

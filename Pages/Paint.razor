@@ -1,0 +1,65 @@
+
+<div class="canvas-container">
+    <canvas style="border: 2px solid @selectedColor;"
+            width="500" height="300" @ref="canvas">
+    </canvas>
+</div>
+
+<div class="colorpicker-container">
+    <label for="colorPicker">Select Color: </label>
+    <input type="color"typeof=""
+           id="colorPicker"
+           class="colorpicker-style"
+           @bind="selectedColor"
+           @oninput="ChangeColor" />
+</div>
+
+<div class="button-container">
+    <button class="savebutton-style" @onclick="SaveSignature">Save</button>
+    <button class="resetbutton-style" @onclick="ResetSignature">Reset</button>
+    <button @onclick="LineSignature">Line</button>
+</div>
+
+@page "/paint"
+@using Microsoft.JSInterop
+@inject IJSRuntime js
+@code {
+    // https://www.youtube.com/watch?v=Z_BK7VkAeGk
+    private ElementReference canvas;
+    private string imageData;
+    private string selectedColor="#000000";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await js.InvokeVoidAsync("initializeCanvas", canvas);
+        }
+    }
+    
+    private async Task ChangeColor(ChangeEventArgs e)
+    {
+        selectedColor = e.Value.ToString();
+        await js.InvokeVoidAsync("changeColor", canvas, selectedColor);
+    }
+
+    private async Task SaveSignature()
+    {
+        // Get the canvas data URL
+        imageData = await js.InvokeAsync<string>("getSignatureImage", canvas);
+
+        // Trigger file download
+        await js.InvokeVoidAsync("downloadFile", imageData, "signature.png");
+    }
+
+    private async Task ResetSignature()
+    {
+        await js.InvokeVoidAsync("clearCanvas", canvas);
+        imageData = null;
+    }
+
+    private async Task LineSignature()
+    {
+        await js.InvokeVoidAsync("lineCanvas", canvas);
+    }
+}

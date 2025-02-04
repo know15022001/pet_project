@@ -1,0 +1,103 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = PN_HDSWeb_ThongBao
+build_property.RootNamespace = PN_HDSWeb_ThongBao
+build_property.ProjectDir = E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = E:\Character\HDSchool\2024_08_08\HDSchool_08_08\HDSchool\PN_HDSWeb_ThongBao
+build_property._RazorSourceGeneratorDebug = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/FetchData.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hEYXRhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_BuaAn.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfQnVhQW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_Card.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfQ2FyZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_Chung.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfQ2h1bmcucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_Dropdown.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfRHJvcGRvd24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_InputDropdown.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfSW5wdXREcm9wZG93bi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Shared/SurveyPrompt.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_BaoBai.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfQmFvQmFpLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-hw6v9050fm
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_HoatDongHangNgay.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfSG9hdERvbmdIYW5nTmdheS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-edt2i9hecy
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_KeHoachHocTap.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfS2VIb2FjaEhvY1RhcC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-4mxzsnvvvl
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_Table.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfVGFibGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-tw9xron4aa
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_ThucDon.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfVGh1Y0Rvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-imcc2sgpsc
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/TB_TinTuc.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVEJfVGluVHVjLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-h6wmtncep6
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-r85ge2ob0x
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-vg81jg878u
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Character/HDSchool/2024_08_08/HDSchool_08_08/HDSchool/PN_HDSWeb_ThongBao/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 

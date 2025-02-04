@@ -1,0 +1,183 @@
+.table-light[b-imcc2sgpsc], .title[b-imcc2sgpsc] {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.title[b-imcc2sgpsc] {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0072B8;
+}
+
+.card[b-imcc2sgpsc] {
+    max-width: 100%;
+}
+
+
+.card-tkb[b-imcc2sgpsc] {
+    position: relative;
+}
+
+    .card-tkb .more-setting[b-imcc2sgpsc] {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        visibility: hidden;
+    }
+
+
+.card-body.card-tkb a[b-imcc2sgpsc] {
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    border: none;
+    color: blue;
+}
+
+.card-body.card-tkb[b-imcc2sgpsc] {
+    position: relative;
+}
+
+.card-tkb .setting-list[b-imcc2sgpsc] {
+    position: absolute;
+    top: 20px;
+    z-index: 1;
+    width: 200px;
+    border: none;
+    padding: 8px 0;
+    border-radius: 6px;
+    box-shadow: 3px 3px 4px #ccc;
+    background-color: #fff;
+    animation: opacityForm-b-imcc2sgpsc .4s ease;
+}
+
+.card-tkb:hover .more-setting[b-imcc2sgpsc] {
+    visibility: visible;
+    cursor: pointer;
+}
+
+
+
+.setting-list p[b-imcc2sgpsc] {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 8px;
+}
+
+.card-tkb .setting-list ul li[b-imcc2sgpsc] {
+    text-align: left;
+    padding: 8px 8px;
+    color: #000;
+}
+
+.setting-list ul li i[b-imcc2sgpsc] {
+    padding: 0 8px;
+}
+
+.setting-list ul li:hover[b-imcc2sgpsc] {
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.card-tkb p[b-imcc2sgpsc] {
+    margin-bottom: 5px;
+}
+
+.card-tkb[b-imcc2sgpsc] {
+    box-shadow: #E3E3E3 5px 5px 5px;
+}
+
+.optionSelect[b-imcc2sgpsc] {
+    padding: 50px 0 !important;
+}
+
+.datatable-filter-demo[b-imcc2sgpsc] {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table[b-imcc2sgpsc] {
+    color: black;
+    text-align: center;
+    table-layout: auto;
+}
+
+    table td[b-imcc2sgpsc] {
+        padding: 1em 8px;
+    }
+
+    table thead[b-imcc2sgpsc] {
+        font-weight: bold;
+    }
+
+    table tbody tr td[b-imcc2sgpsc] {
+        text-align: center;
+        max-height: 50px;
+    }
+
+.btn-container[b-imcc2sgpsc] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.form-group.btn-group[b-imcc2sgpsc] {
+    max-width: 400px;
+    max-height: 40px;
+}
+
+
+.btn2[b-imcc2sgpsc] {
+    background-color: #F2F2F2;
+    opacity: 0; /* Ẩn ban đầu */
+    transition: opacity 0.3s ease-in-out; /* Thêm hiệu ứng chuyển động */
+}
+
+.btn-container:hover .btn2[b-imcc2sgpsc] {
+    opacity: 1; /* Hiển thị khi hover */
+}
+
+@keyframes opacityForm-b-imcc2sgpsc {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    table tbody[b-imcc2sgpsc] {
+        font-size: 10px;
+    }
+
+    table td[b-imcc2sgpsc] {
+        font-size: 10px;
+    }
+
+    .form-group.btn-group button[b-imcc2sgpsc] {
+        font-size: 10px;
+    }
+
+    .card-body.card-tkb .title[b-imcc2sgpsc] {
+        font-size: 10px;
+    }
+
+    .card-body.card-tkb > a[b-imcc2sgpsc] {
+        font-size: 10px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    table[b-imcc2sgpsc] {
+        width: 150%;
+    }
+
+        table td[b-imcc2sgpsc] {
+            font-size: 10px;
+            width: 200px;
+        }
+}

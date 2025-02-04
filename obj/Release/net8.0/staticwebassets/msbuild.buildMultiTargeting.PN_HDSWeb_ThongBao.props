@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\PN_HDSWeb_ThongBao.props" />
+</Project>
