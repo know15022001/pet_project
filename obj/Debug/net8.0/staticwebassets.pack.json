@@ -117,6 +117,10 @@
       "PackagePath": "staticwebassets\\image\\worldmap.png"
     },
     {
+      "Id": "C:\\Users\\Nguyen\\Documents\\GitHub\\pet_project\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
       "Id": "C:\\Users\\Nguyen\\Documents\\GitHub\\pet_project\\wwwroot\\js\\Paint.js",
       "PackagePath": "staticwebassets\\js\\Paint.js"
     },

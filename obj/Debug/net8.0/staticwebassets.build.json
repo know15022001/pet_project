@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "v+APrORm+YEm8zdZmLpB2dg3GLlQYgETfyuh0mwW/Xw=",
+  "Hash": "gZ7pXIYooHEnd0TB8BCp1iwklZo8fobNmExgH3JUr+8=",
   "Source": "Pet_project",
   "BasePath": "_content/Pet_project",
   "Mode": "Default",
@@ -1611,6 +1611,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\image\\worldmap.png"
+    },
+    {
+      "Identity": "C:\\Users\\Nguyen\\Documents\\GitHub\\pet_project\\wwwroot\\index.html",
+      "SourceId": "Pet_project",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nguyen\\Documents\\GitHub\\pet_project\\wwwroot\\",
+      "BasePath": "_content/Pet_project",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
     },
     {
       "Identity": "C:\\Users\\Nguyen\\Documents\\GitHub\\pet_project\\wwwroot\\js\\Paint.js",

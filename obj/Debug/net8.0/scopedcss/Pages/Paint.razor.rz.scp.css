@@ -1,32 +1,32 @@
-canvas[b-m5hqdqn7ef] {
+canvas[b-9frhiuqbmb] {
     border-radius: 10px;
 }
 
-.canvas-container[b-m5hqdqn7ef] {
+.canvas-container[b-9frhiuqbmb] {
     display: flex;
     justify-content: center;
 }
 
-.colorpicker-container[b-m5hqdqn7ef] {
+.colorpicker-container[b-9frhiuqbmb] {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin: 10px;
 }
 
-.button-container[b-m5hqdqn7ef] {
+.button-container[b-9frhiuqbmb] {
     display: flex;
     justify-content: center;
     gap: 10px;
 }
 
-.colorpicker-style[b-m5hqdqn7ef] {
+.colorpicker-style[b-9frhiuqbmb] {
     width: 305px;
     height: 30px;
     border: none;
 }
 
-.savebutton-style[b-m5hqdqn7ef] {
+.savebutton-style[b-9frhiuqbmb] {
     width: 200px;
     height: 30px;
     border-radius: 5px;
@@ -35,7 +35,7 @@ canvas[b-m5hqdqn7ef] {
     border: 2px solid #0E6251;
 }
 
-.resetbutton-style[b-m5hqdqn7ef] {
+.resetbutton-style[b-9frhiuqbmb] {
     width: 200px;
     height: 30px;
     border-radius: 5px;

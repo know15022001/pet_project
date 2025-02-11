@@ -1,0 +1,17 @@
+﻿{
+  "enemies": [
+    {
+      "id": 1,
+      "name": "Slime",
+      "endurance": 50,
+      "speed": 2,
+      "x": 10,
+      "y": 20,
+      "width": 128,
+      "height": 128,
+      "image": "barghest",
+      "isright": true,
+      "_comment": "isright means facing to the right direction in default image"
+    }
+  ]
+}
